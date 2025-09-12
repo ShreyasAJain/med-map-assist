@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Heart, Mail, Lock, User, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +19,14 @@ const Register = () => {
     acceptTerms: false
   });
   const [isLoading, setIsLoading] = useState(false);
+  const { signUp, signInWithGoogle, user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -34,6 +43,11 @@ const Register = () => {
       toast.error("Passwords don't match");
       return;
     }
+
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
     
     if (!formData.acceptTerms) {
       toast.error("Please accept the terms and conditions");
@@ -42,14 +56,13 @@ const Register = () => {
 
     setIsLoading(true);
     
-    // Placeholder for authentication logic
-    toast.info("Please connect to Supabase for user registration functionality");
+    const { error } = await signUp(formData.email, formData.password, formData.fullName);
+    
     setIsLoading(false);
   };
 
-  const handleGoogleRegister = async () => {
-    // Placeholder for Google authentication
-    toast.info("Google registration will be available after Supabase connection");
+  const handleGoogleSignup = async () => {
+    await signInWithGoogle();
   };
 
   return (
@@ -183,7 +196,7 @@ const Register = () => {
               <Button 
                 variant="outline" 
                 className="w-full" 
-                onClick={handleGoogleRegister}
+                onClick={handleGoogleSignup}
               >
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                   <path
@@ -218,12 +231,6 @@ const Register = () => {
           </CardFooter>
         </Card>
 
-        {/* Info Banner */}
-        <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 text-center">
-          <p className="text-sm text-primary">
-            🔒 User registration requires Supabase connection
-          </p>
-        </div>
       </div>
     </div>
   );

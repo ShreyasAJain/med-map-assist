@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,24 +7,36 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from "@/components/ui/separator";
 import { Heart, Mail, Lock, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { signIn, signInWithGoogle, user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Placeholder for authentication logic
-    toast.info("Please connect to Supabase for authentication functionality");
+    const { error } = await signIn(email, password);
+    
+    if (!error) {
+      navigate('/');
+    }
+    
     setIsLoading(false);
   };
 
   const handleGoogleLogin = async () => {
-    // Placeholder for Google authentication
-    toast.info("Google authentication will be available after Supabase connection");
+    await signInWithGoogle();
   };
 
   return (
@@ -143,12 +155,6 @@ const Login = () => {
           </CardFooter>
         </Card>
 
-        {/* Info Banner */}
-        <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 text-center">
-          <p className="text-sm text-primary">
-            🔒 Authentication requires Supabase connection
-          </p>
-        </div>
       </div>
     </div>
   );

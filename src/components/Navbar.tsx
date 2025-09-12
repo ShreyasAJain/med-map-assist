@@ -1,10 +1,18 @@
+import { Heart, Menu, X, LogOut, User, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Heart, User, MapPin, Menu } from "lucide-react";
+import { Button } from "./ui/button";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   return (
     <nav className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
@@ -22,21 +30,43 @@ const Navbar = () => {
             <Link to="/symptom-checker" className="text-muted-foreground hover:text-primary transition-medical">
               Symptom Checker
             </Link>
-            <Link to="/hospitals" className="text-muted-foreground hover:text-primary transition-medical flex items-center space-x-1">
+            <Link to="/hospital-locator" className="text-muted-foreground hover:text-primary transition-medical flex items-center space-x-1">
               <MapPin className="h-4 w-4" />
               <span>Find Hospitals</span>
             </Link>
-            <Link to="/login">
-              <Button variant="outline" size="sm">
-                <User className="h-4 w-4 mr-2" />
-                Login
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button variant="medical" size="sm">
-                Get Started
-              </Button>
-            </Link>
+          </div>
+
+          {/* Desktop Auth Section */}
+          <div className="hidden md:flex items-center space-x-4">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="medical-border">
+                    <User className="w-4 h-4 mr-2" />
+                    {user.email}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={signOut}>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="outline" className="medical-border">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button variant="medical">
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -62,23 +92,43 @@ const Navbar = () => {
               Symptom Checker
             </Link>
             <Link 
-              to="/hospitals" 
+              to="/hospital-locator" 
               className="block text-muted-foreground hover:text-primary transition-medical"
               onClick={() => setIsMenuOpen(false)}
             >
               Find Hospitals
             </Link>
-            <div className="flex space-x-2 pt-2">
-              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="outline" size="sm" className="w-full">
-                  Login
-                </Button>
-              </Link>
-              <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="medical" size="sm" className="w-full">
-                  Get Started
-                </Button>
-              </Link>
+            
+            {/* Mobile Auth Section */}
+            <div className="pt-4 space-y-3 border-t">
+              {user ? (
+                <div className="space-y-2">
+                  <div className="text-sm text-muted-foreground px-2">
+                    Signed in as {user.email}
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    className="w-full medical-border"
+                    onClick={signOut}
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Link to="/login" className="block">
+                    <Button variant="outline" className="w-full medical-border">
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link to="/register" className="block">
+                    <Button variant="medical" className="w-full">
+                      Get Started
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}
