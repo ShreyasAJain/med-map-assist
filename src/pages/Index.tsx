@@ -1,12 +1,29 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Navbar from "@/components/Navbar";
+import HeroSection from "@/components/HeroSection";
+import FeatureCards from "@/components/FeatureCards";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <HeroSection />
+      <FeatureCards />
+      
+      {/* Footer */}
+      <footer className="bg-card border-t border-border py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-muted-foreground">
+              © 2024 MediDiagnose. AI-powered healthcare insights for better health decisions.
+            </p>
+            <div className="mt-4 bg-primary/5 border border-primary/20 rounded-lg p-4 max-w-2xl mx-auto">
+              <p className="text-sm text-primary">
+                🔗 Connect to Supabase for full authentication, database, and Google Maps functionality
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

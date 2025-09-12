@@ -9,12 +9,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+        default: "bg-primary text-primary-foreground hover:bg-primary-hover transition-medical",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-medical",
+        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-medical",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-medical",
+        ghost: "hover:bg-accent hover:text-accent-foreground transition-medical",
+        link: "text-primary underline-offset-4 hover:underline transition-medical",
+        medical: "medical-gradient text-white hover:opacity-90 medical-shadow transition-medical font-semibold",
+        emergency: "emergency-gradient text-emergency-foreground hover:opacity-90 transition-medical font-semibold",
+        success: "success-gradient text-success-foreground hover:opacity-90 transition-medical font-semibold",
+        hero: "medical-gradient text-white hover:opacity-90 medical-shadow transition-medical font-semibold text-lg px-8 py-4",
       },
       size: {
         default: "h-10 px-4 py-2",
