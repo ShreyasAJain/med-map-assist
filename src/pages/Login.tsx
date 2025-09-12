@@ -17,10 +17,11 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      navigate('/');
-    }
-  }, [user, navigate]);
+  if (user) {
+    navigate('/index', { replace: true });
+  }
+}, [user, navigate]);
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,8 +30,9 @@ const Login = () => {
     const { error } = await signIn(email, password);
     
     if (!error) {
-      navigate('/');
-    }
+  navigate('/index', { replace: true });
+}
+
     
     setIsLoading(false);
   };
